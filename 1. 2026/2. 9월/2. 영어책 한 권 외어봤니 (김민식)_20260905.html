@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문화 평론 리포트: 영어책 한 권 외워봤니?</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;700;900&family=Pretendard:wght@300;400;600;800&display=swap');
+
+        :root {
+            /* 책 표지(오리지널 노란색 바탕)에서 추출한 동적 컬러 테마 */
+            --main-color: #F2C94C; /* 지배적인 배경 색상: 밝고 경쾌한 옐로우 */
+            --accent-color: #D32F2F; /* 강조 색상: 타이포그래피에 쓰인 강렬한 레드 */
+            --bg-color: #FCFCFA; /* 옅은 미색 바탕 */
+            --surface-color: #FFFFFF;
+            --text-dark: #1A1A1A;
+            --text-gray: #555555;
+            --line-color: #EAEAEA;
+            
+            --font-serif: 'Noto Serif KR', serif;
+            --font-sans: 'Pretendard', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            font-family: var(--font-serif);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 공통 레이아웃 */
+        .container {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            height: 1px;
+            flex-grow: 1;
+            background-color: var(--line-color);
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+            margin-bottom: 6rem;
+        }
+
+        @media (min-width: 768px) {
+            .hero {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+
+        .hero-image-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-image {
+            max-width: 100%;
+            width: 320px;
+            height: auto;
+            /* 테두리 없이 순수한 그림자만 적용 */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .hero-image:hover {
+            transform: translateY(-5px);
+        }
+
+        .hero-content {
+            flex: 1.2;
+        }
+
+        .book-meta {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            color: var(--text-gray);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .book-title {
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+            word-break: keep-all;
+        }
+
+        .keyword-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .badge {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: 600;
+            background-color: var(--main-color);
+            color: #111; /* 노란색 배경을 고려한 짙은 텍스트 */
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+        }
+
+        .author-info {
+            background: var(--surface-color);
+            padding: 2rem;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .author-name {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .author-desc {
+            font-size: 0.95rem;
+            color: var(--text-gray);
+        }
+
+        .synopsis-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            margin-bottom: 6rem;
+        }
+
+        @media (min-width: 768px) {
+            .synopsis-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .text-block h3 {
+            font-family: var(--font-sans);
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .text-block p {
+            font-size: 1.05rem;
+            color: var(--text-gray);
+            text-align: justify;
+            word-break: keep-all;
+        }
+
+        .quote-section {
+            text-align: center;
+            margin-bottom: 6rem;
+            padding: 4rem 2rem;
+            background: linear-gradient(to bottom, transparent, var(--surface-color), transparent);
+        }
+
+        .quote-icon {
+            font-family: var(--font-sans);
+            font-size: 5rem;
+            color: var(--accent-color);
+            line-height: 0;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .quote-text {
+            font-size: 2rem;
+            font-weight: 900;
+            line-height: 1.4;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            word-break: keep-all;
+        }
+
+        .quote-commentary {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            color: var(--text-gray);
+        }
+
+        .critic-report {
+            background-color: var(--surface-color);
+            padding: 3rem;
+            border-top: 1px solid var(--main-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            margin-bottom: 6rem;
+            position: relative;
+        }
+        
+        .critic-report::before {
+            content: 'CRITIC';
+            position: absolute;
+            top: -15px;
+            right: 30px;
+            background: var(--bg-color);
+            padding: 0 10px;
+            font-family: var(--font-sans);
+            font-weight: 800;
+            color: var(--line-color);
+            font-size: 1.5rem;
+        }
+
+        .critic-text {
+            column-count: 1;
+            column-gap: 3rem;
+            font-size: 1.05rem;
+            color: var(--text-gray);
+            text-align: justify;
+        }
+
+        @media (min-width: 768px) {
+            .critic-text {
+                column-count: 2;
+            }
+        }
+
+        .paradigm-section {
+            margin-bottom: 6rem;
+        }
+
+        .paradigm-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .paradigm-container {
+                flex-direction: row;
+            }
+        }
+
+        .paradigm-card {
+            flex: 1;
+            padding: 2.5rem;
+            background: var(--surface-color);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+
+        .paradigm-card.before {
+            border-top: 4px solid var(--text-gray);
+        }
+
+        .paradigm-card.after {
+            border-top: 4px solid var(--main-color);
+        }
+
+        .paradigm-label {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.1em;
+        }
+        
+        .before .paradigm-label { color: var(--text-gray); }
+        .after .paradigm-label { color: var(--accent-color); }
+
+        .paradigm-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .curator-note {
+            background-color: var(--text-dark);
+            color: var(--surface-color);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .one-liner {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            color: var(--main-color);
+            word-break: keep-all;
+        }
+
+        .hashtags {
+            font-family: var(--font-sans);
+            color: #AAAAAA;
+            margin-bottom: 3rem;
+            font-size: 0.95rem;
+        }
+
+        .recommendation {
+            display: inline-block;
+            text-align: left;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-color);
+            max-width: 600px;
+        }
+
+        .rec-title {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .rec-book {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--surface-color);
+        }
+
+        .rec-logic {
+            font-size: 0.95rem;
+            color: #CCCCCC;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="hero">
+            <div class="hero-image-wrapper">
+                <!-- 실제 도서 이미지 프록시 로드, 테두리 없이 그림자만 적용 -->
+                <img src="https://wsrv.nl/?url=https://image.yes24.com/goods/35095534/XL&w=600&output=webp" alt="영어책 한 권 외워봤니 표지" class="hero-image">
+            </div>
+            <div class="hero-content">
+                <div class="book-meta">김민식 지음 | 위즈덤하우스</div>
+                <h1 class="book-title">영어책 한 권<br>외워봤니?</h1>
+                
+                <div class="keyword-badges">
+                    <span class="badge">#루틴의힘</span>
+                    <span class="badge">#성취감</span>
+                    <span class="badge">#태도변화</span>
+                </div>
+
+                <div class="author-info">
+                    <div class="author-name">저자 김민식</div>
+                    <div class="author-desc">
+                        MBC PD이자 다수의 베스트셀러를 집필한 작가. 유학이나 어학연수 없이 30년간 독학으로 영어를 마스터한 본인의 경험을 바탕으로, 언어 학습이 단순한 기술 습득을 넘어 삶의 태도를 벼려내는 과정임을 역설한다. 유쾌한 화법 이면에 단단한 근성을 강조하는 실천주의자.
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="synopsis-grid">
+            <div class="text-block">
+                <h2 class="section-title">Synopsis. 내용 요약</h2>
+                <h3>단 한 권의 책이 만드는 언어의 기적</h3>
+                <p>
+                    이 책은 복잡한 문법이나 화려한 어휘를 가르치지 않는다. 대신 시중의 얇고 만만한 ‘기초 영어 회화책’ 단 한 권을 완벽하게 머릿속에 집어넣는 무식하고도 정직한 방법을 제안한다. 하루 10문장씩, 출퇴근 자투리 시간을 활용하여 문장을 ‘암기’가 아닌 몸에 새기는 ‘암송’으로 승화시키는 과정을 상세히 담았다. 영어가 입에 붙는 기술적인 노하우를 넘어, 포기하지 않고 끝끝내 한 권을 소화해내는 성취의 메커니즘을 보여준다.
+                </p>
+            </div>
+            <div class="text-block">
+                <h2 class="section-title">Intention. 작가의 의도</h2>
+                <h3>언어라는 핑계로 기르는 인생의 근력</h3>
+                <p>
+                    작가가 독자에게 진정으로 전하고자 하는 바는 완벽한 네이티브 스피커가 되라는 것이 아니다. 나이, 재능, 환경을 핑계로 쉽게 포기해버리는 우리의 습성을 타파하는 데 그 목적이 있다. ‘한 권을 다 외웠다’는 작지만 확실한 성공의 경험은 자존감이라는 강력한 무기가 되어 돌아온다. 즉, 작가에게 영어 공부란 삶의 고단함 속에서도 나를 지탱하게 만드는 ‘비인지적 능력(Grit)’을 훈련하는 최적의 스파링 파트너인 셈이다.
+                </p>
+            </div>
+        </section>
+
+        <section class="quote-section">
+            <div class="quote-icon">“</div>
+            <h2 class="quote-text">인생을 살면서 한 번도 넘어지지 않는 사람은 없습니다. 넘어지지 않는 법을 배우는 게 아니라, 넘어져도 다시 일어나는 법을 배워야 해요. 영어 공부도 마찬가지입니다.</h2>
+            <p class="quote-commentary">
+                이 문장은 어학서적의 외피를 쓴 이 책이 사실은 강렬한 실존주의적 에세이임을 증명한다. 외국어 학습 과정에서 필연적으로 수반되는 '틀림'과 '부끄러움'을 삶의 굴곡에 비유함으로써, 실수를 두려워하여 침묵하는 현대인들에게 기꺼이 부딪히고 깨어질 용기를 촉구한다.
+            </p>
+        </section>
+
+        <section class="critic-report">
+            <h2 class="section-title">Critic's Report. 비평적 시선</h2>
+            <div class="critic-text">
+                <p>
+                    인공지능 기반의 번역기와 대화형 AI가 실시간으로 언어의 장벽을 허무는 시대에, "책을 통째로 외우라"는 김민식의 제언은 자칫 시대착오적인 아날로그적 노동으로 치부될 위험이 있다. 모든 이의 인지 구조가 단순 암송에 최적화되어 있지 않다는 교육학적 한계도 분명히 존재한다. 효율성을 최우선으로 삼는 현대인들에게 이 방식은 고통스럽고 미련해 보일 수 있다.
+                </p>
+                <br>
+                <p>
+                    그러나 이 텍스트의 진정한 독창성은 <strong>'비효율성의 자발적 수용'</strong>에 있다. 모든 것이 터치 한 번으로 즉각 주어지는 시대에, 저자는 기꺼이 시간과 노력을 갈아 넣는 원초적 몰입의 가치를 복원시킨다. 언어를 뇌에 저장하는 정보가 아니라 근육에 새기는 흉터로 취급함으로써, 독자는 단순히 영어를 얻는 것을 넘어 그 과정을 버텨낸 '달라진 자신'을 획득하게 된다. 요컨대 이 책은 영어 학습서라기보다, 도구적 합리성에 지친 이들에게 자기 주도성을 되찾아주는 심리적 선언문에 가깝다.
+                </p>
+            </div>
+        </section>
+
+        <section class="paradigm-section">
+            <h2 class="section-title">Paradigm Shift. 인식의 확장</h2>
+            <div class="paradigm-container">
+                <div class="paradigm-card before">
+                    <div class="paradigm-label">Before</div>
+                    <p class="paradigm-text">
+                        "영어는 완벽한 문법과 발음을 갖춘 뒤에야 입 밖으로 내뱉을 수 있는 지식의 영역이다."
+                    </p>
+                </div>
+                <div class="paradigm-card after">
+                    <div class="paradigm-label">After</div>
+                    <p class="paradigm-text">
+                        "영어는 무수한 실수와 부끄러움을 딛고 매일의 습관으로 빚어내는 신체적 근력의 영역이다."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="curator-note">
+            <h2 class="one-liner">언어라는 핑계로 완성하는 단단한 삶의 태도</h2>
+            <div class="hashtags">#영어책한권외워봤니 #김민식PD #습관의힘 #자존감수업 #실천주의</div>
+            
+            <div class="recommendation">
+                <div class="rec-title">Curator's Suggestion</div>
+                <div class="rec-book">『아주 작은 습관의 힘 (Atomic Habits)』 - 제임스 클리어</div>
+                <div class="rec-logic">
+                    거대한 목표(유창한 외국어)에 짓눌리지 않고, 매일 하루 10문장이라는 아주 작고 보잘것없는 실천(시스템)을 통해 정체성을 변화시킨다는 점에서 두 책은 완벽히 같은 철학을 공유하고 있습니다. 거창한 의지력보다 시스템의 힘을 믿는 분들께 추천합니다.
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

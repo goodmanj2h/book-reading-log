@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Reading Log - Gem Prompt Guideline</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;700;900&family=Pretendard:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-ivory: #F9F8F6;
+            --main-navy: #1B263B;
+            --accent-gold: #C5A880;
+            --text-dark: #2C3E50;
+            --text-light: #7F8C8D;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-ivory);
+            font-family: 'Pretendard', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4, .serif {
+            font-family: 'Noto Serif KR', serif;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: var(--white);
+            box-shadow: 0 20px 40px rgba(27, 38, 59, 0.08);
+            border-top: 8px solid var(--main-navy);
+            border-bottom: 8px solid var(--accent-gold);
+            overflow: hidden;
+        }
+
+        .header-section {
+            padding: 60px 50px 40px;
+            text-align: center;
+            border-bottom: 1px solid rgba(197, 168, 128, 0.3);
+            position: relative;
+        }
+
+        .header-section::before {
+            content: 'GEM AUTOMATION';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        .main-title {
+            font-size: 2.8rem;
+            color: var(--main-navy);
+            font-weight: 900;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .sub-title {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            font-weight: 300;
+            margin-bottom: 30px;
+        }
+
+        .tags {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 6px 16px;
+            border: 1px solid var(--accent-gold);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--accent-gold);
+            font-weight: 600;
+            letter-spacing: 1px;
+            background: transparent;
+        }
+
+        .content-section {
+            padding: 50px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--main-navy);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--accent-gold);
+            font-size: 1.2rem;
+        }
+
+        .protocol-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .protocol-card {
+            background-color: var(--bg-ivory);
+            padding: 25px;
+            border-radius: 4px;
+            border-left: 3px solid var(--accent-gold);
+            transition: transform 0.3s ease;
+        }
+
+        .protocol-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .protocol-card h3 {
+            font-size: 1.1rem;
+            color: var(--main-navy);
+            margin-bottom: 15px;
+        }
+
+        .protocol-card p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .quote-block {
+            text-align: center;
+            padding: 40px;
+            background-color: var(--main-navy);
+            color: var(--white);
+            margin: 50px 0;
+            position: relative;
+        }
+
+        .quote-icon {
+            font-size: 3rem;
+            color: var(--accent-gold);
+            opacity: 0.5;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .quote-text {
+            font-size: 1.6rem;
+            font-weight: 300;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .framework-list {
+            list-style: none;
+        }
+
+        .framework-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px dashed rgba(27, 38, 59, 0.1);
+        }
+
+        .framework-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .step-number {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            min-width: 50px;
+            padding-top: 2px;
+        }
+
+        .step-content h4 {
+            font-size: 1.2rem;
+            color: var(--main-navy);
+            margin-bottom: 8px;
+        }
+
+        .step-content p {
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+
+        .paradigm-shift {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+            background: var(--bg-ivory);
+            padding: 30px;
+            border-radius: 8px;
+        }
+
+        .shift-col {
+            flex: 1;
+        }
+
+        .shift-col h4 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .shift-col.before h4 {
+            color: var(--text-light);
+        }
+
+        .shift-col.after h4 {
+            color: var(--main-navy);
+        }
+
+        .shift-col p {
+            font-size: 0.95rem;
+            background: var(--white);
+            padding: 20px;
+            border-radius: 4px;
+            height: 100%;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .footer-section {
+            background-color: var(--main-navy);
+            padding: 30px 50px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+        }
+
+        .prompt-container {
+            margin-top: 20px;
+            background-color: var(--main-navy);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--accent-gold);
+            font-family: 'Noto Serif KR', serif;
+            font-weight: 600;
+        }
+
+        .copy-btn {
+            background-color: var(--accent-gold);
+            color: var(--white);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Pretendard', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .copy-btn:hover {
+            background-color: #b09570;
+        }
+
+        textarea#promptText {
+            width: 100%;
+            height: 350px;
+            background-color: transparent;
+            color: #e0e0e0;
+            padding: 20px;
+            border: none;
+            resize: vertical;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            outline: none;
+        }
+
+        .toast {
+            visibility: hidden;
+            min-width: 280px;
+            background-color: var(--accent-gold);
+            color: #fff;
+            text-align: center;
+            border-radius: 4px;
+            padding: 12px 20px;
+            position: absolute;
+            z-index: 10;
+            left: 50%;
+            top: 20px;
+            transform: translateX(-50%);
+            font-size: 0.95rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.3s, top 0.3s;
+        }
+
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+            top: 60px;
+        }
+
+        .dashboard-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--main-navy);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(27, 38, 59, 0.2);
+            font-size: 0.95rem;
+            font-family: 'Pretendard', sans-serif;
+        }
+
+        .dashboard-btn:hover {
+            background-color: var(--accent-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(197, 168, 128, 0.3);
+        }
+
+        .dashboard-url {
+            display: block;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .dashboard-url:hover {
+            color: var(--main-navy);
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .protocol-grid {
+                grid-template-columns: 1fr;
+            }
+            .paradigm-shift {
+                flex-direction: column;
+            }
+            .content-section, .header-section {
+                padding: 30px 20px;
+            }
+            .main-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <header class="header-section">
+            <h1 class="main-title serif">Book Reading Log<br>System Guideline</h1>
+            <p class="sub-title">프리미엄 독서 비평 인포그래픽 생성을 위한 Gem 자동화 아키텍처</p>
+            <div class="tags">
+                <span class="tag">#FAIL_SAFE</span>
+                <span class="tag">#DYNAMIC_THEME</span>
+                <span class="tag">#EDITORIAL_DESIGN</span>
+            </div>
+            
+            <a href="https://overjoyed-unrelated-manifesto.ngrok-free.dev/" target="_blank" class="dashboard-btn">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Dashboard 접속하기
+            </a>
+            <a href="https://overjoyed-unrelated-manifesto.ngrok-free.dev/" target="_blank" class="dashboard-url">
+                https://overjoyed-unrelated-manifesto.ngrok-free.dev/
+            </a>
+        </header>
+
+        <main class="content-section">
+            
+            <h2 class="section-title serif"><i class="fa-solid fa-shield-halved"></i> 3대 무결성 프로토콜 (Protocols)</h2>
+            <div class="protocol-grid">
+                <div class="protocol-card">
+                    <h3 class="serif">1. Image Fail-Safe</h3>
+                    <p>Yes24, 교보문고 등의 <strong>CORS 보안 차단을 우회</strong>하기 위해 <code>wsrv.nl</code> 이미지 프록시를 통과합니다. 만약 검색에 실패하더라도 <code>onerror</code> 속성을 통해 고급스러운 더미(Placeholder) 이미지로 즉각 대체되어 엑스박스를 완벽히 방지합니다.</p>
+                </div>
+                <div class="protocol-card">
+                    <h3 class="serif">2. Dynamic Theming</h3>
+                    <p>AI가 추출한 책 표지의 지배적인 색상(Main)과 포인트 색상(Accent)을 <strong>CSS 변수(:root)로 자동 치환</strong>합니다. 어떤 책을 입력하든 표지와 인포그래픽이 시각적인 물아일체를 이룹니다.</p>
+                </div>
+                <div class="protocol-card">
+                    <h3 class="serif">3. Embedded Widget</h3>
+                    <p>단순 텍스트 출력을 넘어, Yes24의 실제 상품 페이지로 직결되는 <strong>UI 위젯 및 버튼</strong>을 HTML 내부에 직접 디자인하여 렌더링합니다. 독서 기록이 하나의 랜딩 페이지로 기능합니다.</p>
+                </div>
+            </div>
+
+            <div class="quote-block">
+                <div class="quote-icon">“</div>
+                <h2 class="quote-text serif">단 두 개의 단어로,<br>비평가의 뇌와 디자이너의 손길을 움직이다.</h2>
+                <p style="color: var(--accent-gold); font-size: 0.9rem; letter-spacing: 1px;">THE CORE PHILOSOPHY OF THIS PROMPT</p>
+            </div>
+
+            <h2 class="section-title serif" style="margin-top: 60px;"><i class="fa-solid fa-list-ol"></i> 6단계 분석 프레임워크 (Framework)</h2>
+            <ul class="framework-list">
+                <li class="framework-item">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h4 class="serif">Hero Section : 표지와 텍스트 해부</h4>
+                        <p>프레임 없이 깔끔하게 배치된 책 표지 이미지와 함께, 저자/출판사 정보, 책을 관통하는 3가지 핵심 키워드 뱃지를 최상단에 시각화합니다.</p>
+                    </div>
+                </li>
+                <li class="framework-item">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h4 class="serif">Synopsis & Intention : 내용과 의도</h4>
+                        <p>책의 전반적인 줄거리(핵심 논지)를 요약하고, 작가가 이 책을 집필하게 된 시대적/개인적 배경과 궁극적인 메시지를 통찰력 있게 도출합니다.</p>
+                    </div>
+                </li>
+                <li class="framework-item">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h4 class="serif">The Core Quote : 발췌와 변주</h4>
+                        <p>테마 컬러가 적용된 따옴표 디자인 안에 AI가 직접 선정한 텍스트의 핵심 명문장을 배치하고, 그 문장이 지니는 철학적 의미를 해설합니다.</p>
+                    </div>
+                </li>
+                <li class="framework-item">
+                    <div class="step-number">04</div>
+                    <div class="step-content">
+                        <h4 class="serif">Critic's Report : 비평적 시선</h4>
+                        <p>단순한 요약을 넘어, 작가의 한계점이나 텍스트의 독창성, 시대적 맥락에서의 가치를 분석한 전문가 수준의 에디토리얼 평론을 작성합니다.</p>
+                    </div>
+                </li>
+                <li class="framework-item">
+                    <div class="step-number">05</div>
+                    <div class="step-content">
+                        <h4 class="serif">Paradigm Shift : 인식의 확장</h4>
+                        <p>이 책을 읽기 전의 보편적 인식(Before)과 읽은 후 획득한 새로운 시야(After)를 대비시켜, 독서의 실질적인 효용을 시각적으로 증명합니다.</p>
+                    </div>
+                </li>
+                <li class="framework-item">
+                    <div class="step-number">06</div>
+                    <div class="step-content">
+                        <h4 class="serif">Curator's Note : 큐레이션</h4>
+                        <p>리포트를 마무리하는 20자 이내의 날카로운 한 줄 평과 검색용 해시태그, 그리고 사유를 확장해 줄 연관 도서 1권을 논리적으로 추천합니다.</p>
+                    </div>
+                </li>
+            </ul>
+
+            <h2 class="section-title serif" style="margin-top: 60px;"><i class="fa-solid fa-terminal"></i> 프롬프트 원본 (Copy & Paste)</h2>
+            <p class="sub-title" style="margin-bottom: 20px;">아래의 <strong>'Copy Prompt'</strong> 버튼을 눌러 전체 명령어를 복사한 뒤, Gem의 System Instructions 란에 붙여넣어 자동화 봇을 완성하세요.</p>
+            <div class="prompt-container">
+                <div class="prompt-header">
+                    <span>System Instruction (최종 완성본)</span>
+                    <button class="copy-btn" onclick="copyPrompt()">
+                        <i class="fa-regular fa-copy"></i> Copy Prompt
+                    </button>
+                </div>
+                <div id="copyToast" class="toast">✔️ 클립보드에 복사되었습니다!</div>
+                <textarea id="promptText" readonly>[System Instruction]
+당신은 깊이 있는 사유를 지닌 문화 평론가이자, 최고급 에디토리얼(Editorial) 웹 디자이너입니다. 사용자가 **[책 제목]과 [지은이]**만 입력하더라도 반드시 **Yes24**를 기반으로 웹 검색을 수행하여 출판사, 책 내용, 비평 등을 도출하고, '고급스러운 전문가 비평 리포트' 형태의 단일 HTML 파일(CSS 포함)로 출력해야 합니다.
+
+[Yes24 연동 및 무중단(Fail-safe) 프로토콜] - *출력 전 반드시 수행*
+1. Yes24 기반 표지 검색 및 프록시 우회 (가장 중요):
+   - 반드시 웹 검색을 통해 **Yes24**의 해당 도서 상품 페이지를 찾으십시오.
+   - Yes24의 고해상도 표지 이미지 URL을 추출한 뒤, 이미지 차단을 막기 위해 반드시 `wsrv.nl/?url=` 프록시를 앞에 붙여 삽입합니다.
+   - 만약 Yes24 검색에 실패하거나 이미지를 찾지 못해도 절대 에러를 내지 말고, 즉시 대체 이미지(`https://placehold.co/400x600/1B263B/C5A880?text=Cover+Image`)를 적용하여 생성을 완수하십시오. (모든 `<img>` 태그에 `onerror` 속성 필수 적용)
+2. Yes24 임베디드형 위젯 삽입:
+   - 인포그래픽 상단 또는 하단에 Yes24 해당 도서 페이지로 바로 이동할 수 있는 **'Yes24 도서 정보 보기' 고급 위젯(또는 세련된 버튼)**을 HTML/CSS로 직접 디자인하여 삽입하십시오. 링크(`href`)에는 검색한 실제 Yes24 상품 주소를 연결합니다.
+3. 동적 컬러 테마 적용 및 기본값:
+   - 검색된 책 표지의 색상을 추론하여 CSS `:root` 변수(`--main-color`, `--accent-color`)로 적용하여 디자인 일체감을 높입니다. 추론 불가 시 기본 테마(미드나잇 네이비 #1B263B / 앤틱 골드 #C5A880)를 강제 적용합니다.
+4. 렌더링 무결성: HTML 태그 짝맞춤, 외부 CSS 없이 자체 `<style>`로 완벽 구동되도록 확인. 표지 주변의 불필요한 프레임 효과는 절대 넣지 말고 표지만 깔끔하게 배치(`box-shadow` 활용)할 것.
+
+[인포그래픽 구조 (프리미엄 분석 리포트 6단계)]
+1. Hero Section: 
+   - 좌측: 프레임 없이 삽입된 Yes24 기반 책 표지 이미지.
+   - 우측: 책 제목, 저자 및 출판사 정보, 3가지 핵심 키워드 뱃지, Yes24 바로가기 버튼.
+   - [저자 소개]: 작가의 주요 이력 및 성향.
+2. Synopsis & Intention: 
+   - [책의 내용]: 줄거리 및 핵심 논지.
+   - [작가의 의도]: 집필 배경과 궁극적 메시지.
+3. The Core Quote: 
+   - 테마 컬러가 적용된 따옴표(“ ”)와 직접 선정한 명문장.
+   - 문장이 던지는 철학적 해설.
+4. Critic's Report: 
+   - 텍스트의 독창성과 한계를 분석한 전문가 평론.
+5. Paradigm Shift: 
+   - 'Before (보편적 인식)' vs 'After (획득한 시야)'를 표/대칭 레이아웃으로 시각화.
+6. Curator's Note: 
+   - 20자 이내 한 줄 평, 해시태그 3~5개, 연관 추천 도서 1권.
+
+[출력 규칙]
+- 코드 블록 앞뒤로 어떠한 설명, 과정, 인사말도 절대 출력하지 마십시오.
+- 오직 ```html 로 시작해서 ``` 로 끝나는 마크다운 코드 블록 단 하나만 출력하십시오.</textarea>
+            </div>
+
+            <h2 class="section-title serif" style="margin-top: 60px;"><i class="fa-solid fa-code-compare"></i> 시스템 도입 효과 (Paradigm Shift)</h2>
+            <div class="paradigm-shift">
+                <div class="shift-col before">
+                    <h4 class="serif"><i class="fa-solid fa-xmark" style="color: #E74C3C;"></i> 일반 프롬프트 (Before)</h4>
+                    <p>단순 텍스트 나열, CORS 정책에 막힌 엑스박스(Broken Image) 표지, 일관성 없는 디자인, 외부 링크 연결 불가 등 불안정한 결과물 출력.</p>
+                </div>
+                <div class="shift-col after">
+                    <h4 class="serif"><i class="fa-solid fa-check" style="color: var(--accent-gold);"></i> 본 가이드라인 적용 시 (After)</h4>
+                    <p>표지 색상 기반 자동 테마 생성, 프록시 및 Fallback을 통한 이미지 로드 보장, 전문가 비평이 담긴 완벽한 HTML 에디토리얼 페이지 생성.</p>
+                </div>
+            </div>
+
+        </main>
+
+        <footer class="footer-section">
+            <p>© Designed via Automated Gem Prompt Architecture. Premium Book Log System.</p>
+        </footer>
+    </div>
+
+    <script>
+        function copyPrompt() {
+            var copyText = document.getElementById("promptText");
+            
+            // Select the text field
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // For mobile devices
+
+            // Execute the copy command (Compatible with iFrames)
+            try {
+                document.execCommand("copy");
+                
+                // Show toast notification
+                var toast = document.getElementById("copyToast");
+                toast.className = "toast show";
+                
+                // Hide toast after 3 seconds
+                setTimeout(function(){ 
+                    toast.className = toast.className.replace("show", ""); 
+                }, 3000);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+            }
+            
+            // Deselect text
+            window.getSelection().removeAllRanges();
+        }
+    </script>
+</body>
+</html>

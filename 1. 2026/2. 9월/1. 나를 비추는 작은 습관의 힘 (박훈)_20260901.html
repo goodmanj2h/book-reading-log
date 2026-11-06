@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나를 비추는 아주 작은 습관의 힘 - Editorial Review</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;700&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 책 표지 기반 동적 컬러 테마 (예스24/춤추는고래 표지 기준 딥블루/스카이블루 추론) */
+            --main-color: #1a365d;      /* 심연의 네이비 (지배적 배경색) */
+            --accent-color: #3b82f6;    /* 도약하는 블루 (강조색) */
+            --bg-color: #f8fafc;        /* 옅은 미색 (배경) */
+            --text-primary: #0f172a;    /* 주 텍스트 */
+            --text-secondary: #475569;  /* 보조 텍스트 */
+            --border-color: #e2e8f0;
+            --white: #ffffff;
+            
+            --font-serif: 'Noto Serif KR', serif;
+            --font-sans: 'Pretendard', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 6rem;
+        }
+
+        .book-cover-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .book-cover {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 4px;
+            /* 불필요한 테두리 없이 부드러운 그림자만 적용 */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .book-cover:hover {
+            transform: translateY(-5px);
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: var(--accent-color);
+            color: var(--white);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .book-title {
+            font-family: var(--font-serif);
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--main-color);
+            word-break: keep-all;
+        }
+
+        .author-info {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            border-left: 4px solid var(--accent-color);
+            padding-left: 1rem;
+        }
+        
+        .author-bio {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            margin-top: 1rem;
+        }
+
+        /* Section Typography */
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            color: var(--main-color);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: var(--border-color);
+        }
+
+        /* Synopsis & Intention */
+        .synopsis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 6rem;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            border-top: 4px solid var(--accent-color);
+        }
+
+        .card h3 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--main-color);
+            margin-bottom: 1.5rem;
+        }
+
+        /* The Core Quote */
+        .quote-section {
+            text-align: center;
+            margin-bottom: 6rem;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--bg-color) 100%);
+            border-radius: 24px;
+            position: relative;
+        }
+
+        .quote-icon {
+            font-family: var(--font-serif);
+            font-size: 6rem;
+            color: var(--accent-color);
+            opacity: 0.2;
+            position: absolute;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            line-height: 1;
+        }
+
+        .core-quote {
+            font-family: var(--font-serif);
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--main-color);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+            word-break: keep-all;
+        }
+
+        .quote-analysis {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Critic's Report */
+        .critic-report {
+            margin-bottom: 6rem;
+        }
+
+        .report-box {
+            background-color: var(--white);
+            padding: 3rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            column-count: 2;
+            column-gap: 3rem;
+        }
+
+        .report-box p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        /* Paradigm Shift */
+        .paradigm-shift {
+            margin-bottom: 6rem;
+        }
+
+        .shift-container {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .shift-box {
+            flex: 1;
+            padding: 2.5rem;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shift-before {
+            background-color: #f1f5f9;
+            border: 1px solid #e2e8f0;
+        }
+
+        .shift-after {
+            background-color: var(--main-color);
+            color: var(--white);
+        }
+
+        .shift-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .shift-after .shift-label {
+            color: var(--accent-color);
+        }
+
+        .shift-content {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 600;
+            word-break: keep-all;
+        }
+
+        /* Curator's Note */
+        .curator-note {
+            background-color: var(--white);
+            padding: 4rem;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .one-line-review {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--main-color);
+            margin-bottom: 2rem;
+        }
+
+        .hashtags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .hashtag {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .recommendation {
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .recommendation h4 {
+            color: var(--main-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .author-info {
+                border-left: none;
+                border-bottom: 4px solid var(--accent-color);
+                padding-left: 0;
+                padding-bottom: 1rem;
+                display: inline-block;
+            }
+            .badges {
+                justify-content: center;
+            }
+            .synopsis-grid {
+                grid-template-columns: 1fr;
+            }
+            .report-box {
+                column-count: 1;
+            }
+            .shift-container {
+                flex-direction: column;
+            }
+            .book-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 1. Hero Section -->
+    <section class="hero">
+        <div class="book-cover-wrapper">
+            <!-- wsrv.nl 프록시를 사용하여 예스24 이미지 URL 호출 -->
+            <img src="https://wsrv.nl/?url=https://image.yes24.com/goods/77723620/XL&w=600&output=webp" alt="나를 비추는 아주 작은 습관의 힘 책 표지" class="book-cover" onerror="this.src='https://placehold.co/400x600/1a365d/ffffff?text=Image+Not+Found'">
+        </div>
+        <div class="hero-content">
+            <div class="badges">
+                <span class="badge">실천 철학</span>
+                <span class="badge">행동 심리</span>
+                <span class="badge">자아 효능감</span>
+            </div>
+            <h1 class="book-title">나를 비추는 아주 작은 습관의 힘</h1>
+            <div class="author-info">
+                <strong>박훈</strong> 지음
+            </div>
+            <div class="author-bio">
+                <strong>저자 소개:</strong> 경향신문사와 웅진출판사 등 출판/언론계에서 다년간 근무하며 수많은 성공 사례와 실패의 궤적을 관찰해 온 작가. 무수한 자기계발서들이 범하는 거대 담론의 함정을 피하고, 일상의 아주 작은 단위에서 시작되는 실천적 변화의 메커니즘을 탐구한다.
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Synopsis & Intention -->
+    <section>
+        <h2 class="section-title">Synopsis & Intention</h2>
+        <div class="synopsis-grid">
+            <div class="card">
+                <h3>내용의 해부</h3>
+                <p>이 책은 '성공'이라는 추상적인 목표를 매일의 '습관'이라는 구체적인 단위로 해체한다. 나쁜 습관을 인지하고 버리는 1단계부터, 자존감 회복, 창의적 사고, 시간 관리, 인맥 형성에 이르기까지 인생 전반을 아우르는 10가지 실천 파트로 구성되어 있다. 저자는 거창한 결심보다 작은 노력의 누적이 어떻게 극적인 결과로 이어지는지, 실제 사례를 통해 논증한다.</p>
+            </div>
+            <div class="card">
+                <h3>작가의 궁극적 의도</h3>
+                <p>박훈 작가는 독자들에게 '당장 당신의 무의식적인 반복 행동을 점검하라'고 촉구한다. 성공은 특별한 이벤트가 아니라, 어제보다 조금 나은 오늘을 만드는 작은 행동들의 총합이라는 메시지를 전한다. 결과 지향적 사회에서 지친 현대인들에게, 과정 자체를 통제함으로써 잃어버린 '삶의 주도권'을 되찾아주려는 실용주의적 의도가 짙게 배어 있다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. The Core Quote -->
+    <section class="quote-section">
+        <span class="quote-icon">“</span>
+        <h2 class="core-quote">습관에서 나오는 힘은 성공을 부른다. 성패를 좌우하는 건 습관에 달려있다.</h2>
+        <p class="quote-analysis">평범해 보이는 이 문장은 운명론에 대한 강력한 반제(Antithesis)다. 우리가 맞이하는 결과(성공 혹은 실패)는 외부의 우연이나 타고난 재능이 아니라, 철저히 내재화된 '반복(습관)'의 산물이라는 선언이다. 이는 삶의 결과에 대한 책임이자, 동시에 통제 가능성에 대한 위로다.</p>
+    </section>
+
+    <!-- 4. Critic's Report -->
+    <section class="critic-report">
+        <h2 class="section-title">Critic's Report</h2>
+        <div class="report-box">
+            <p>박훈의 『나를 비추는 아주 작은 습관의 힘』은 제임스 클리어의 『아주 작은 습관의 힘(Atomic Habits)』과 유사한 제목과 결을 공유하지만, 한국적 맥락과 직장인들의 실전 경험에 더 밀착되어 있다는 점에서 차별점을 지닌다. 특히 출판과 언론이라는 치열한 현장에서 저자가 목도한 생생한 인간 군상의 모습이 '습관'이라는 렌즈를 통해 투영된다.</p>
+            <p>다만, 자기계발 장르의 특성상 제시되는 방법론들이 다소 고전적(인사하기, 시간 관리 등)이라는 한계는 존재한다. 그러나 이 책의 미덕은 새로움의 제시에 있는 것이 아니라, 우리가 머리로는 알고 있으나 체화하지 못한 '기본'의 가치를 환기시키는 데 있다. 시스템과 환경 설계에 집중하는 서구권의 습관 서적들과 달리, 이 책은 '자존감'과 '긍정적 태도' 등 개인의 내면적 동기에 조금 더 방점을 찍고 있어 감성적 동인(Motive)을 필요로 하는 독자에게 유효하게 작동한다.</p>
+        </div>
+    </section>
+
+    <!-- 5. Paradigm Shift -->
+    <section class="paradigm-shift">
+        <h2 class="section-title">Paradigm Shift</h2>
+        <div class="shift-container">
+            <div class="shift-box shift-before">
+                <div class="shift-label">Before Reading</div>
+                <div class="shift-content">성공은 극복해야 할 거대한 산격이자 획기적인 '한 방'의 결과다.</div>
+            </div>
+            <div class="shift-box shift-after">
+                <div class="shift-label">After Reading</div>
+                <div class="shift-content">성공은 매일 아침 거울 앞을 지키는 사소하지만 단단한 '나만의 루틴'이다.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Curator's Note -->
+    <section class="curator-note">
+        <h2 class="one-line-review">"무너진 일상을 재건하는 가장 작고 확실한 벽돌 한 장."</h2>
+        <div class="hashtags">
+            <span class="hashtag">#자기효능감</span>
+            <span class="hashtag">#마이크로루틴</span>
+            <span class="hashtag">#행동수정</span>
+            <span class="hashtag">#실천주의</span>
+        </div>
+        <div class="recommendation">
+            <h4>Curator's 연관 도서 추천</h4>
+            <p><strong>『아주 작은 습관의 힘』 (제임스 클리어 저)</strong><br>
+            박훈의 책이 습관의 '동기와 철학'을 감성적으로 짚어준다면, 제임스 클리어의 책은 습관을 형성하고 유지하는 구체적인 '시스템 설계(4법칙)'를 과학적으로 제시한다. 두 책을 병독하면 내면의 동기와 외부의 시스템을 동시에 구축할 수 있다.</p>
+        </div>
+    </section>
+
+</div>
+
+</body>
+</html>

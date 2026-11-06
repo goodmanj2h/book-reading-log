@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Book Reading Log | 프리미엄 독서 대시보드</title>
+    
+    <!-- PWA 및 모바일 홈화면 설정 -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1B263B">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Reading Log">
+    <link rel="apple-touch-icon" href="icon.svg">
+
+    <!-- 프리미엄 서체 (Noto Serif KR & Pretendard) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 아이콘 폰트 & 차트 라이브러리 (Chart.js) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- 대시보드 데이터 연동 -->
+    <script src="dashboard_data.js"></script>
+
+    <style>
+        :root {
+            --bg-ivory: #F9F8F6;
+            --main-navy: #1B263B;
+            --accent-gold: #C5A880;
+            --accent-gold-dark: #A98B62;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --card-bg: #FFFFFF;
+            --border-soft: rgba(27, 38, 59, 0.08);
+            --shadow-subtle: 0 4px 20px rgba(27, 38, 59, 0.06);
+            --shadow-card: 0 10px 30px rgba(27, 38, 59, 0.08);
+            --radius-md: 12px;
+            --radius-lg: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-ivory);
+            font-family: 'Pretendard', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .serif {
+            font-family: 'Noto Serif KR', serif;
+        }
+
+        /* 헤더 스타일링 */
+        header {
+            background-color: var(--main-navy);
+            color: #FFFFFF;
+            padding: 3.5rem 1.5rem 3rem;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 5px solid var(--accent-gold);
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(197, 168, 128, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(197, 168, 128, 0.2);
+            color: var(--accent-gold);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            width: fit-content;
+            border: 1px solid rgba(197, 168, 128, 0.3);
+        }
+
+        .main-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        .sub-title {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 1.05rem;
+            max-width: 650px;
+            font-weight: 300;
+        }
+
+        .last-updated {
+            font-size: 0.8rem;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* 메인 컨테이너 */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 5rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* 통계 요약 카드 그리드 */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            margin-top: -4.5rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            padding: 1.75rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-soft);
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(27, 38, 59, 0.12);
+        }
+
+        .metric-icon-box {
+            width: 54px;
+            height: 54px;
+            border-radius: 12px;
+            background: rgba(197, 168, 128, 0.15);
+            color: var(--accent-gold-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .metric-info h4 {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .metric-info .value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--main-navy);
+            line-height: 1.1;
+        }
+
+        .metric-info .unit {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-left: 2px;
+        }
+
+        /* 차트 섹션 */
+        .charts-row {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-subtle);
+            border: 1px solid var(--border-soft);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h3 {
+            font-size: 1.25rem;
+            color: var(--main-navy);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-header h3 i {
+            color: var(--accent-gold);
+            font-size: 1.1rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 260px;
+            width: 100%;
+        }
+
+        /* 인용구 배너 */
+        .quote-banner {
+            background: linear-gradient(135deg, var(--main-navy) 0%, #2A3C59 100%);
+            color: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+            border-left: 6px solid var(--accent-gold);
+        }
+
+        .quote-banner .quote-mark {
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            font-size: 5rem;
+            color: rgba(197, 168, 128, 0.15);
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .quote-banner-title {
+            color: var(--accent-gold);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quote-banner-text {
+            font-size: 1.4rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+        }
+
+        .quote-banner-author {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* 서재 및 필터 컨트롤 바 */
+        .library-section {
+            margin-top: 1rem;
+        }
+
+        .filter-bar {
+            background: var(--card-bg);
+            padding: 1.25rem 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-subtle);
+            border: 1px solid var(--border-soft);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .filter-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pill-button {
+            background: var(--bg-ivory);
+            border: 1px solid rgba(27, 38, 59, 0.12);
+            color: var(--text-dark);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .pill-button:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold-dark);
+        }
+
+        .pill-button.active {
+            background: var(--main-navy);
+            color: #FFFFFF;
+            border-color: var(--main-navy);
+            font-weight: 600;
+        }
+
+        .search-box {
+            position: relative;
+            min-width: 260px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 9px 16px 9px 38px;
+            border-radius: 50px;
+            border: 1px solid rgba(27, 38, 59, 0.15);
+            font-size: 0.9rem;
+            background: var(--bg-ivory);
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent-gold);
+            background: #FFFFFF;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* 도서 카드 그리드 */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .book-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-subtle);
+            border: 1px solid var(--border-soft);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .book-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-card);
+        }
+
+        .book-card-cover {
+            height: 280px;
+            background: #2C3E50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 1.5rem;
+        }
+
+        .book-card-cover img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+            border-radius: 4px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .book-card:hover .book-card-cover img {
+            transform: scale(1.04);
+        }
+
+        .book-card-badge-date {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: rgba(27, 38, 59, 0.85);
+            backdrop-filter: blur(4px);
+            color: var(--accent-gold);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 50px;
+            letter-spacing: 0.5px;
+        }
+
+        .book-card-body {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            gap: 0.75rem;
+        }
+
+        .book-card-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .book-badge {
+            background: rgba(197, 168, 128, 0.15);
+            color: var(--accent-gold-dark);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .book-card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--main-navy);
+            line-height: 1.35;
+            word-break: keep-all;
+        }
+
+        .book-card-author {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .book-card-quote {
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            background: var(--bg-ivory);
+            padding: 10px 12px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-gold);
+            margin-top: auto;
+            line-height: 1.5;
+            font-style: italic;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .book-card-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-soft);
+            background: rgba(249, 248, 246, 0.6);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .read-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--main-navy);
+            color: #FFFFFF;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .read-btn:hover {
+            background: var(--accent-gold-dark);
+            transform: translateY(-1px);
+        }
+
+        /* 빈 상태 */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 5rem 2rem;
+            color: var(--text-muted);
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 1px dashed rgba(27, 38, 59, 0.15);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+        }
+
+        /* 푸터 */
+        footer {
+            background-color: var(--main-navy);
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        footer strong {
+            color: var(--accent-gold);
+        }
+
+        /* 반응형 모바일 최적화 */
+        @media (max-width: 992px) {
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+                margin-top: -3.5rem;
+            }
+            .charts-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            header {
+                padding: 2.5rem 1rem 2rem;
+            }
+            .main-title {
+                font-size: 2rem;
+            }
+            .metrics-grid {
+                grid-template-columns: 1fr;
+                margin-top: -2rem;
+                gap: 1rem;
+            }
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-box {
+                width: 100%;
+            }
+            .quote-banner {
+                padding: 1.75rem;
+            }
+            .quote-banner-text {
+                font-size: 1.15rem;
+            }
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 헤더 영역 -->
+    <header>
+        <div class="header-inner">
+            <div class="brand-badge">
+                <i class="fa-solid fa-feather"></i> EDITORIAL ARCHIVE
+            </div>
+            <div>
+                <h1 class="main-title serif">Book Reading Log</h1>
+                <p class="sub-title">나의 지적 여정을 기록하고, 책 속의 문장과 통찰을 아름답게 시각화하는 개인 서재 대시보드</p>
+            </div>
+            <div class="last-updated" id="lastUpdated">
+                <i class="fa-regular fa-clock"></i> 데이터 동기화 확인 중...
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 콘텐츠 -->
+    <main>
+
+        <!-- 1. 핵심 요약 지표 카드 -->
+        <section class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon-box">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                </div>
+                <div class="metric-info">
+                    <h4>총 완독 도서</h4>
+                    <div class="value"><span id="metricTotal">0</span><span class="unit">권</span></div>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon-box">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <div class="metric-info">
+                    <h4>올해 독서량 (<span id="metricYearLabel">2026</span>)</h4>
+                    <div class="value"><span id="metricThisYear">0</span><span class="unit">권</span></div>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon-box">
+                    <i class="fa-solid fa-tags"></i>
+                </div>
+                <div class="metric-info">
+                    <h4>탐색한 관심 분야</h4>
+                    <div class="value"><span id="metricGenreCount">0</span><span class="unit">개</span></div>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon-box">
+                    <i class="fa-solid fa-quote-left"></i>
+                </div>
+                <div class="metric-info">
+                    <h4>수집된 핵심 통찰</h4>
+                    <div class="value"><span id="metricQuoteCount">0</span><span class="unit">개</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. 인터랙티브 차트 섹션 (월별 추이 & 장르 비율) -->
+        <section class="charts-row">
+            <div class="chart-card">
+                <div class="section-header">
+                    <h3 class="serif"><i class="fa-solid fa-chart-column"></i> 월별 독서량 페이스</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="section-header">
+                    <h3 class="serif"><i class="fa-solid fa-chart-pie"></i> 장르 및 관심사 분포</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="genreChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 감성 인용구 하이라이트 배너 -->
+        <section class="quote-banner" id="quoteBanner">
+            <span class="quote-mark">“</span>
+            <div class="quote-banner-title">
+                <i class="fa-solid fa-sparkles"></i> TODAY'S CORE QUOTE
+            </div>
+            <div class="quote-banner-text serif" id="quoteBannerText">
+                "책을 읽는다는 것은 타인의 가장 정제된 사유와 조우하는 경이로운 사건이다."
+            </div>
+            <div class="quote-banner-author" id="quoteBannerAuthor">
+                — Book Reading Log Archive
+            </div>
+        </section>
+
+        <!-- 4. 서재 탐색 & 필터링 툴바 -->
+        <section class="library-section">
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <span class="filter-label"><i class="fa-solid fa-calendar-days"></i> 연도:</span>
+                    <div id="yearFilterGroup" class="filter-group">
+                        <button class="pill-button active" onclick="setYearFilter('all')">전체</button>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <span class="filter-label"><i class="fa-solid fa-layer-group"></i> 장르:</span>
+                    <div id="genreFilterGroup" class="filter-group">
+                        <button class="pill-button active" onclick="setGenreFilter('all')">전체</button>
+                    </div>
+                </div>
+
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchInput" placeholder="도서명 또는 저자 검색..." oninput="handleSearch()">
+                </div>
+            </div>
+
+            <!-- 5. 도서 카드 그리드 -->
+            <div class="books-grid" id="booksGrid">
+                <!-- 동적으로 카드 삽입 -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 푸터 -->
+    <footer>
+        <p><strong>Book Reading Log</strong> · 나의 생각과 기록이 머무는 지적 서재</p>
+        <p style="margin-top: 6px; font-size: 0.75rem;">모바일 및 데스크톱 실시간 반응형 대시보드</p>
+    </footer>
+
+    <!-- 프론트엔드 제어 스크립트 -->
+    <script>
+        // 전역 상태
+        let currentYearFilter = 'all';
+        let currentGenreFilter = 'all';
+        let searchQuery = '';
+        let booksData = [];
+        let statsData = {};
+
+        // 차트 객체 참조
+        let monthlyChartInstance = null;
+        let genreChartInstance = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initDashboard();
+        });
+
+        function initDashboard() {
+            if (!window.BOOK_DASHBOARD_DATA) {
+                console.error("데이터 파일(dashboard_data.js)을 찾을 수 없습니다.");
+                document.getElementById('lastUpdated').innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> 데이터셋을 로드할 수 없습니다. build_dashboard.py를 실행하세요.';
+                return;
+            }
+
+            const data = window.BOOK_DASHBOARD_DATA;
+            booksData = data.books || [];
+            statsData = data.statistics || {};
+
+            // 1. 헤더 동기화 시간 표시
+            if (data.generated_at) {
+                document.getElementById('lastUpdated').innerHTML = `<i class="fa-regular fa-clock"></i> 최신 동기화: ${data.generated_at}`;
+            }
+
+            // 2. 상단 핵심 지표 업데이트
+            updateMetrics();
+
+            // 3. 차트 렌더링
+            renderMonthlyChart();
+            renderGenreChart();
+
+            // 4. 인용구 배너 업데이트
+            updateQuoteBanner();
+
+            // 5. 필터 버튼 렌더링
+            renderFilterButtons();
+
+            // 6. 도서 카드 렌더링
+            renderBooks();
+        }
+
+        // 지표 업데이트
+        function updateMetrics() {
+            document.getElementById('metricTotal').textContent = statsData.total_books || booksData.length;
+            document.getElementById('metricThisYear').textContent = statsData.this_year_count || 0;
+            document.getElementById('metricYearLabel').textContent = statsData.current_year || new Date().getFullYear();
+            document.getElementById('metricGenreCount').textContent = (statsData.top_genres || []).length;
+            
+            const quotesCount = booksData.filter(b => b.quote && b.quote.trim().length > 0).length;
+            document.getElementById('metricQuoteCount').textContent = quotesCount;
+        }
+
+        // 월별 독서량 막대 차트
+        function renderMonthlyChart() {
+            const ctx = document.getElementById('monthlyChart').getContext('2d');
+            const trend = statsData.monthly_trend || [];
+            
+            const labels = trend.map(t => t.month);
+            const counts = trend.map(t => t.count);
+
+            if (monthlyChartInstance) {
+                monthlyChartInstance.destroy();
+            }
+
+            monthlyChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '완독 권수',
+                        data: counts,
+                        backgroundColor: '#1B263B',
+                        borderRadius: 6,
+                        hoverBackgroundColor: '#C5A880'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                                font: { family: 'Pretendard' }
+                            },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            ticks: { font: { family: 'Pretendard' } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 장르/키워드 도넛 차트
+        function renderGenreChart() {
+            const ctx = document.getElementById('genreChart').getContext('2d');
+            const topGenres = (statsData.top_genres || []).slice(0, 6);
+
+            const labels = topGenres.map(g => g.genre);
+            const counts = topGenres.map(g => g.count);
+
+            const palette = ['#1B263B', '#C5A880', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B'];
+
+            if (genreChartInstance) {
+                genreChartInstance.destroy();
+            }
+
+            genreChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: counts,
+                        backgroundColor: palette.slice(0, labels.length),
+                        borderWidth: 2,
+                        borderColor: '#FFFFFF'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                font: { family: 'Pretendard', size: 12 },
+                                boxWidth: 12
+                            }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+        }
+
+        // 인용구 배너 업데이트 (인용구가 있는 책 중 랜덤 또는 첫 번째 표시)
+        function updateQuoteBanner() {
+            const booksWithQuote = booksData.filter(b => b.quote && b.quote.length > 5);
+            if (booksWithQuote.length > 0) {
+                // 랜덤 선택
+                const chosen = booksWithQuote[Math.floor(Math.random() * booksWithQuote.length)];
+                document.getElementById('quoteBannerText').textContent = `"${chosen.quote}"`;
+                document.getElementById('quoteBannerAuthor').textContent = `— 『${chosen.title}』 (${chosen.author})`;
+            }
+        }
+
+        // 필터 버튼 동적 렌더링
+        function renderFilterButtons() {
+            // 연도 필터
+            const yearGroup = document.getElementById('yearFilterGroup');
+            const years = Object.keys(statsData.year_counts || {}).sort().reverse();
+            
+            let yearHtml = `<button class="pill-button ${currentYearFilter === 'all' ? 'active' : ''}" onclick="setYearFilter('all')">전체</button>`;
+            years.forEach(y => {
+                yearHtml += `<button class="pill-button ${currentYearFilter === y ? 'active' : ''}" onclick="setYearFilter('${y}')">${y}년</button>`;
+            });
+            yearGroup.innerHTML = yearHtml;
+
+            // 상위 5개 장르 필터
+            const genreGroup = document.getElementById('genreFilterGroup');
+            const topGenres = (statsData.top_genres || []).slice(0, 5);
+            
+            let genreHtml = `<button class="pill-button ${currentGenreFilter === 'all' ? 'active' : ''}" onclick="setGenreFilter('all')">전체</button>`;
+            topGenres.forEach(g => {
+                genreHtml += `<button class="pill-button ${currentGenreFilter === g.genre ? 'active' : ''}" onclick="setGenreFilter('${g.genre}')">${g.genre}</button>`;
+            });
+            genreGroup.innerHTML = genreHtml;
+        }
+
+        function setYearFilter(year) {
+            currentYearFilter = year;
+            renderFilterButtons();
+            renderBooks();
+        }
+
+        function setGenreFilter(genre) {
+            currentGenreFilter = genre;
+            renderFilterButtons();
+            renderBooks();
+        }
+
+        function handleSearch() {
+            searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+            renderBooks();
+        }
+
+        // 도서 카드 그리드 렌더링
+        function renderBooks() {
+            const container = document.getElementById('booksGrid');
+            
+            // 필터링 적용
+            const filtered = booksData.filter(book => {
+                // 연도 필터
+                if (currentYearFilter !== 'all' && book.year !== currentYearFilter) {
+                    return false;
+                }
+                // 장르 필터
+                if (currentGenreFilter !== 'all' && (!book.badges || !book.badges.includes(currentGenreFilter))) {
+                    return false;
+                }
+                // 검색어 필터
+                if (searchQuery) {
+                    const matchTitle = (book.title || '').toLowerCase().includes(searchQuery);
+                    const matchAuthor = (book.author || '').toLowerCase().includes(searchQuery);
+                    const matchQuote = (book.quote || '').toLowerCase().includes(searchQuery);
+                    if (!matchTitle && !matchAuthor && !matchQuote) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-book-open"></i>
+                        <h3 class="serif" style="margin-bottom: 8px;">해당 조건의 도서가 없습니다</h3>
+                        <p>필터 조건을 초기화하거나 다른 검색어로 찾아보세요.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(book => {
+                // 표지 이미지 폴백
+                const fallbackImg = `https://placehold.co/400x600/1B263B/C5A880?text=${encodeURIComponent(book.title || 'Book Cover')}`;
+                const coverSrc = book.cover_url || fallbackImg;
+
+                // 배지 태그들 (최대 3개 표시)
+                const badgesHtml = (book.badges || []).slice(0, 3).map(b => 
+                    `<span class="book-badge">#${b}</span>`
+                ).join('');
+
+                // 인용구 영역
+                let quoteHtml = '';
+                if (book.quote) {
+                    quoteHtml = `<div class="book-card-quote">"${book.quote}"</div>`;
+                } else if (book.one_line_review) {
+                    quoteHtml = `<div class="book-card-quote">"${book.one_line_review}"</div>`;
+                }
+
+                html += `
+                    <div class="book-card">
+                        <div class="book-card-cover" style="background-color: ${book.theme_color || '#1B263B'};">
+                            <span class="book-card-badge-date">${book.read_date || book.year}</span>
+                            <img src="${coverSrc}" alt="${book.title} 표지" onerror="this.onerror=null; this.src='${fallbackImg}';">
+                        </div>
+                        <div class="book-card-body">
+                            <div class="book-card-badges">
+                                ${badgesHtml}
+                            </div>
+                            <h3 class="book-card-title serif">${book.title}</h3>
+                            <p class="book-card-author">${book.author} 지음</p>
+                            ${quoteHtml}
+                        </div>
+                        <div class="book-card-footer">
+                            <a href="${book.relative_path}" target="_blank" class="read-btn">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> 비평 리포트 전문 읽기
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
+

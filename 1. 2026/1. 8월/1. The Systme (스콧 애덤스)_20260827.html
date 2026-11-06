@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The System - 스콧 애덤스 | 프리미엄 비평 리포트</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ivory: '#F9F8F6',
+                        navy: '#1B263B',
+                        gold: '#C5A880',
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif KR"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F9F8F6; /* Ivory */
+            color: #1B263B; /* Navy */
+            font-family: 'Noto Serif KR', serif;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .gold-border {
+            border-color: #C5A880;
+        }
+
+        .gold-text {
+            color: #C5A880;
+        }
+
+        .bg-navy {
+            background-color: #1B263B;
+        }
+        
+        .bg-gold {
+            background-color: #C5A880;
+        }
+
+        /* Book Cover 3D Effect */
+        .book-shadow {
+            box-shadow: 
+                -15px 15px 30px rgba(27, 38, 59, 0.2),
+                inset -2px 0 5px rgba(255, 255, 255, 0.3),
+                inset 2px 0 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .book-shadow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0.4), rgba(255,255,255,0));
+            z-index: 10;
+        }
+
+        /* Decorative Elements */
+        .quote-mark {
+            font-size: 5rem;
+            line-height: 1;
+            color: #C5A880;
+            opacity: 0.3;
+            position: absolute;
+        }
+        
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #C5A880, transparent);
+            margin: 4rem 0;
+        }
+
+        /* Table Styling for Paradigm Shift */
+        .paradigm-table th {
+            border-bottom: 2px solid #C5A880;
+        }
+        .paradigm-table td {
+            border-bottom: 1px solid rgba(27, 38, 59, 0.1);
+        }
+
+        /* Fade-in Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <header class="py-6 px-8 border-b border-navy/10 sticky top-0 bg-ivory/90 backdrop-blur-sm z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-widest uppercase">Editorial <span class="gold-text">Critique</span></h1>
+            <p class="text-sm tracking-widest text-navy/60">Vol. 42 / Non-Fiction</p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-8 py-12 md:py-20">
+
+        <!-- 1. Hero Section -->
+        <section class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center mb-24 animate-fade-in">
+            <!-- Book Cover -->
+            <div class="md:col-span-5 flex justify-center md:justify-end perspective-1000">
+                <div class="relative w-64 md:w-80 h-auto">
+                    <!-- 💡 이곳에 실제 도서 이미지 주소를 붙여넣으세요 -->
+                    <!-- Yes24 도서 이미지 추론 -->
+                    <img src="https://image.yes24.com/goods/124129609/XL" 
+                         alt="The System 표지 이미지" 
+                         class="w-full h-auto object-cover rounded-r-md book-shadow transform hover:-translate-y-2 transition-transform duration-500"
+                         onerror="this.onerror=null; this.src='https://placehold.co/400x600/1B263B/C5A880?text=The+System\n\nScott+Adams';">
+                </div>
+            </div>
+
+            <!-- Title & Info -->
+            <div class="md:col-span-7 flex flex-col justify-center">
+                <div class="flex flex-wrap gap-2 mb-6">
+                    <span class="px-3 py-1 text-xs border border-gold text-gold rounded-full tracking-wider">#자기계발</span>
+                    <span class="px-3 py-1 text-xs border border-gold text-gold rounded-full tracking-wider">#성공철학</span>
+                    <span class="px-3 py-1 text-xs border border-gold text-gold rounded-full tracking-wider">#시스템사고</span>
+                </div>
+                
+                <h2 class="text-4xl md:text-6xl font-black mb-4 tracking-tight leading-tight">더 시스템<br><span class="text-2xl md:text-3xl font-light text-navy/70">The System</span></h2>
+                <h3 class="text-xl md:text-2xl font-semibold mb-8 gold-text">스콧 애덤스 <span class="text-sm text-navy/50 font-normal">지음</span></h3>
+                
+                <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-navy/5">
+                    <h4 class="text-sm font-bold uppercase tracking-widest mb-3 border-b border-gold pb-2 inline-block">Author Profile</h4>
+                    <p class="text-sm md:text-base leading-relaxed text-navy/80">
+                        전 세계 65개국 2,000여 개 신문에 연재된 전설적인 비즈니스 풍자 만화 <b>『딜버트(Dilbert)』의 창조자</b>. 버클리대학교 MBA 출신으로 은행과 통신회사에서 16년간 기술직 근로자로 일하며 조직의 비효율과 부조리를 체득했다. 수많은 발명, 투자, 외식 사업 등에서 처참한 실패를 반복했으나, 이를 단순한 패배가 아닌 <b>'시스템을 구축하기 위한 데이터'</b>로 환원하여 결국 세계적인 성공을 거머쥐었다. 그는 철저히 현실주의적이고 공학적인 시각으로 인간의 심리와 성공의 메커니즘을 해부한다.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- 2. Synopsis & Intention -->
+        <section class="mb-24">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-full bg-navy flex items-center justify-center">
+                            <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold">책의 내용 <span class="text-sm font-normal text-navy/50 block">Synopsis</span></h3>
+                    </div>
+                    <p class="text-justify leading-relaxed">
+                        이 책은 "열정을 가지면 성공한다"는 기존 자기계발서의 뻔한 클리셰를 정면으로 반박한다. 스콧 애덤스는 자신의 방대한 실패 이력서를 공개하며, <b>성공은 '열정'이나 단일한 '목표'가 아니라, 일상에서 작동하는 견고한 '시스템'의 결과</b>라고 주장한다. 그는 에너지 관리, 기술의 조합(Talent Stack), 긍정 선언, 확률 관리 등의 현실적이고 공학적인 도구들을 제시한다. 다이어트를 위해 '10kg 감량'이라는 도달하기 힘든 목표를 세우는 대신, '매일 건강한 식단과 운동'이라는 시스템을 일상에 장착하라는 것이다. 실패를 자산으로 변환하는 실용적인 방법론이다.
+                    </p>
+                </div>
+                
+                <div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-full bg-navy flex items-center justify-center">
+                            <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold">작가의 의도 <span class="text-sm font-normal text-navy/50 block">Intention</span></h3>
+                    </div>
+                    <p class="text-justify leading-relaxed">
+                        애덤스의 의도는 <b>현대인들을 '목표 지향적 삶'이 주는 만성적인 패배감에서 해방</b>시키는 것이다. 목표 중심의 삶은 달성하기 전까지 늘 스스로를 '실패 상태'로 규정하게 만든다. 작가는 독자들이 '의지력'이라는 고갈되기 쉬운 한정된 자원에 기대지 않기를 바란다. 대신, 무언가를 성취하기 위해 뼈를 깎는 고통을 감내하기보다, 자연스럽게 실행할 수밖에 없는 환경과 패턴(시스템)을 설계하도록 유도한다. 이는 평범한 재능을 가진 사람들도 여러 기술을 조합해 고유한 경쟁력을 확보하고, 지속 가능한 성공을 거둘 수 있다는 냉철하지만 따뜻한 격려다.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. The Core Quote -->
+        <section class="mb-24 bg-navy text-ivory p-10 md:p-16 rounded-2xl relative overflow-hidden">
+            <span class="quote-mark top-4 left-4">“</span>
+            <span class="quote-mark bottom-4 right-4 rotate-180">“</span>
+            
+            <div class="relative z-10 max-w-4xl mx-auto text-center">
+                <p class="text-2xl md:text-4xl font-black mb-8 leading-snug gold-text">
+                    "목표는 패배자들을 위한 것이며,<br>시스템은 승자들을 위한 것이다."
+                </p>
+                <div class="w-16 h-1 bg-gold mx-auto mb-8"></div>
+                <p class="text-base md:text-lg text-ivory/80 text-justify md:text-center font-light">
+                    이 문장은 성취에 대한 인류의 보편적 환상을 거침없이 타격한다. 목표는 도달점(End-point)에 시선을 두게 하여 현재를 결핍의 상태로 만들지만, 시스템은 과정(Process) 그 자체에 집중하게 하여 매 순간을 승리로 만든다. 평론가의 시선에서 볼 때, 이는 단순한 처세술을 넘어선 <b>실존적 태도의 전환</b>이다. 인간의 의지력을 불신하고 구조를 신뢰하는 애덤스의 공학적 사유의 정수가 담긴 선언으로, 과정의 가치를 복원하려는 현대 철학의 흐름과도 맞닿아 있다.
+                </p>
+            </div>
+        </section>
+
+        <!-- 4. Critic's Report -->
+        <section class="mb-24">
+            <div class="border-l-4 gold-border pl-6 mb-10">
+                <h3 class="text-3xl font-bold tracking-tight">비평적 시선</h3>
+                <p class="gold-text uppercase tracking-widest text-sm font-semibold mt-1">Critic's Report</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 text-justify">
+                <p class="first-letter:text-5xl first-letter:font-black first-letter:text-navy first-letter:float-left first-letter:mr-3 first-letter:leading-none">
+                    자기계발서 시장은 오랜 시간 동안 '간절히 원하고(Secret)', '끝까지 버티는(Grit)' 신화에 지배되어 왔다. 스콧 애덤스의 『더 시스템』은 이러한 주류 담론에 던지는 날카로운 반역이다. 그는 열정을 '쓰레기(bullshit)'라 명명하며, 성공한 자들의 사후 확증 편향일 뿐이라고 일축한다. 이러한 그의 시선은 지극히 세속적이고 냉소적으로 보일 수 있으나, 역설적으로 가장 인간친화적이다. 우리의 뇌가 가진 생물학적 한계(의지력의 고갈, 감정의 기복)를 인정하고, 그것과 싸우지 않는 방식을 제안하기 때문이다.
+                </p>
+                <p>
+                    텍스트의 가장 큰 독창성은 <b>'재능의 스택(Talent Stack)'</b> 개념에 있다. 1%의 천재가 될 수 없다면, 25% 수준의 적당한 기술 3~4가지를 융합해 희소성을 창출하라는 전략은 무한 경쟁 시대의 평범한 이들에게 강력한 해방구가 된다. 다만, 비평적 한계점도 존재한다. 저자가 제안하는 '시스템' 역시 고도의 자기 통제와 분석 능력을 전제로 한다는 점이다. 또한, '이기주의가 결국 이타주의로 연결된다'는 식의 논리는 자본주의적 승자독식 구조에 대한 구조적 성찰을 간과한 채, 철저히 개인의 미시적 최적화에만 머무르는 한계를 노출한다. 그럼에도 불구하고, 목적론적 삶에 지친 현대인에게 이 책이 제공하는 <b>'과정 중심의 해독제'</b>는 여전히 강력한 유효성을 지닌다.
+                </p>
+            </div>
+        </section>
+
+        <!-- 5. Paradigm Shift -->
+        <section class="mb-24">
+            <h3 class="text-2xl font-bold mb-8 text-center">인식의 확장 <span class="text-sm font-normal text-navy/50 block mt-1">Paradigm Shift</span></h3>
+            
+            <div class="overflow-hidden rounded-xl border border-navy/10 shadow-sm bg-white">
+                <table class="w-full text-left border-collapse paradigm-table">
+                    <thead>
+                        <tr class="bg-navy text-ivory">
+                            <th class="p-6 font-semibold w-1/2 text-center border-r border-navy/20">
+                                <span class="text-gold text-xs block mb-1 uppercase tracking-widest">Before</span>
+                                읽기 전 보편적 인식
+                            </th>
+                            <th class="p-6 font-semibold w-1/2 text-center">
+                                <span class="text-gold text-xs block mb-1 uppercase tracking-widest">After</span>
+                                읽은 후 획득한 시야
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm md:text-base">
+                        <tr>
+                            <td class="p-6 border-r border-navy/10 relative">
+                                성공을 위해서는 <b>가슴 뛰는 열정</b>이 필수적이다.
+                            </td>
+                            <td class="p-6 font-medium text-navy bg-gold/5 relative">
+                                일이 잘 풀리기 때문에 열정이 생기는 것이다. <b>성공이 열정을 부른다.</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-6 border-r border-navy/10">
+                                실패는 부끄러운 것이며 피해야 할 <b>오점</b>이다.
+                            </td>
+                            <td class="p-6 font-medium text-navy bg-gold/5">
+                                실패는 무언가를 배우고 자산을 얻어내는 <b>의도된 실험</b>이다.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-6 border-r border-navy/10">
+                                탁월해지려면 한 분야의 <b>상위 1% 전문가</b>가 되어야 한다.
+                            </td>
+                            <td class="p-6 font-medium text-navy bg-gold/5">
+                                <b>상위 25% 수준의 기술 여러 개</b>를 조합하여 독보적인 가치를 만든다.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-6 border-r border-navy/10">
+                                목표를 향해 <b>의지력</b>을 불태워 하루하루를 견뎌야 한다.
+                            </td>
+                            <td class="p-6 font-medium text-navy bg-gold/5">
+                                의지력이 필요 없는 <b>환경과 시스템</b>을 구축하여 에너지를 보존한다.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 6. Curator's Note -->
+        <section class="bg-ivory border-2 border-gold/30 p-8 md:p-12 rounded-xl text-center relative mt-16">
+            <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-ivory px-4">
+                <span class="bg-navy text-gold text-xs font-bold uppercase tracking-widest py-2 px-4 rounded-full">Curator's Note</span>
+            </div>
+            
+            <h4 class="text-2xl md:text-3xl font-black text-navy mb-6 mt-4">
+                "꿈을 버리고 패턴을 입어라, 기적이 일상이 될 것이다."
+            </h4>
+            
+            <div class="flex justify-center gap-3 mb-10 flex-wrap">
+                <span class="text-sm text-navy/70 bg-white px-3 py-1 rounded shadow-sm">#목표의_해체</span>
+                <span class="text-sm text-navy/70 bg-white px-3 py-1 rounded shadow-sm">#에너지보존법칙</span>
+                <span class="text-sm text-navy/70 bg-white px-3 py-1 rounded shadow-sm">#탤런트스택</span>
+                <span class="text-sm text-navy/70 bg-white px-3 py-1 rounded shadow-sm">#냉소적_실용주의</span>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg text-left border border-navy/5 shadow-sm max-w-2xl mx-auto">
+                <div class="flex items-start gap-4">
+                    <div class="flex-shrink-0 mt-1">
+                        <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    </div>
+                    <div>
+                        <h5 class="text-sm font-bold uppercase tracking-widest text-navy/50 mb-1">연관 추천 도서</h5>
+                        <p class="font-bold text-lg mb-2 text-navy">아주 작은 습관의 힘 (제임스 클리어 저)</p>
+                        <p class="text-sm leading-relaxed text-navy/80 text-justify">
+                            스콧 애덤스가 '시스템의 철학과 거시적 방향성'을 제시했다면, 제임스 클리어는 그 시스템을 일상에서 구축하는 '미시적이고 구체적인 방법론(Atomic Habits)'을 제공합니다. 애덤스의 통찰에 동의하여 목표 대신 시스템을 구축하기로 결심했다면, 이 책을 통해 정체성 변화와 환경 설계를 통한 실천적 행동 지침을 완벽하게 보완할 수 있습니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-navy text-ivory/50 py-8 text-center text-sm border-t border-navy">
+        <p>© 2026 Premium Editorial Critique. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
