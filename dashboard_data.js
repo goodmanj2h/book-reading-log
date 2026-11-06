@@ -1,6 +1,6 @@
-// 자동 생성된 북 리딩 로그 데이터셋 (2026-11-06 17:26:03)
+// 자동 생성된 북 리딩 로그 데이터셋 (2026-11-06 17:31:55)
 window.BOOK_DASHBOARD_DATA = {
-  "generated_at": "2026-11-06 17:26:03",
+  "generated_at": "2026-11-06 17:31:55",
   "statistics": {
     "total_books": 4,
     "current_year": "2026",
