@@ -167,10 +167,11 @@ def parse_html_file(file_path):
             year, month, day = date_str.split('-')
 
         # 프로젝트 루트 기준 상대 경로 (웹 프론트엔드 통신 및 보안용)
-        relative_path = str(path_obj.relative_to(BASE_DIR))
+        # Mac OS의 NFD 자모 분리 현상을 웹 표준인 NFC로 정규화합니다.
+        relative_path = unicodedata.normalize('NFC', str(path_obj.relative_to(BASE_DIR)))
 
         return {
-            "id": relative_path,           # 안전한 상대 경로 식별자
+            "id": relative_path,           # 안전한 상대 경로 식별자 (NFC 정규화 완료)
             "title": title,                 # 책 제목
             "author": author,               # 저자
             "publisher": publisher,         # 출판사

@@ -194,12 +194,14 @@ const animateValue = (element, start, end, duration) => {
 // 7. 도서 열람용 URL 생성 (로컬 API vs GitHub Pages 상대경로)
 // ------------------------------------------------------------------------------
 const getBookUrl = (bookId) => {
+    // Mac OS의 NFD 한글을 표준 NFC로 정규화하여 웹 호환성 보장
+    const normalizedId = (bookId || '').normalize('NFC');
     // 깃허브 페이지스이거나 파일 프로토콜인 경우 정적 상대 경로를 URL 인코딩하여 직접 연결
     if (isGitHubPages || window.location.protocol === 'file:') {
-        return encodeURI(bookId);
+        return encodeURI(normalizedId);
     }
     // 로컬 서버 환경에서는 보안 API 엔드포인트 사용
-    return `/api/book?path=${encodeURIComponent(bookId)}`;
+    return `/api/book?path=${encodeURIComponent(normalizedId)}`;
 };
 
 // ------------------------------------------------------------------------------
