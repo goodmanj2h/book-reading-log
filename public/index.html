@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- 문자 인코딩 및 모바일 반응형 뷰포트 설정 -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>독서 기록 대시보드 - Book Reading Log</title>
+    
+    <!-- 외부 이미지 리퍼러 정책 (예스24 표지 이미지 로딩 보장) -->
+    <meta name="referrer" content="no-referrer">
+
+    <!-- 모바일 PWA 및 웹앱 전체화면 설정 (아이폰/안드로이드 홈 화면 추가 지원) -->
+    <meta name="theme-color" content="#0071E3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="독서로그">
+    <link rel="apple-touch-icon" href="icon.svg">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- 프리텐다드(Pretendard) 폰트 & Chart.js 로드 -->
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- 스타일시트 연결 -->
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+    <div class="app-container">
+        <!-- ========================================================= -->
+        <!-- [PC 좌측 사이드바] (태블릿 및 모바일에서는 미니 헤더 및 하단 네비로 대체) -->
+        <!-- ========================================================= -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <h1>Book Reading Log</h1>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#dashboard" class="nav-item active" data-target="dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    대시보드
+                </a>
+                <a href="#gallerySection" class="nav-item" data-target="gallerySection">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    독서 갤러리
+                </a>
+                <a href="#statsSection" class="nav-item" data-target="statsSection">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    독서 통계
+                </a>
+            </nav>
+            
+            <!-- 실시간 동기화 상태 표시기 -->
+            <div class="connection-status" id="connectionStatus">
+                <div class="status-indicator"></div>
+                <span>연결 대기 중...</span>
+            </div>
+        </aside>
+
+        <!-- ========================================================= -->
+        <!-- [모바일 전용 상단 헤더] (모바일 환경에서만 노출됨) -->
+        <!-- ========================================================= -->
+        <header class="mobile-header">
+            <div class="mobile-logo">
+                <div class="logo-icon small"></div>
+                <span>Book Reading Log</span>
+            </div>
+            <div class="mobile-status-badge" id="mobileStatusBadge">
+                <span class="status-dot"></span>
+                <span class="status-label">동기화 완료</span>
+            </div>
+        </header>
+
+        <!-- ========================================================= -->
+        <!-- [메인 콘텐츠 영역] -->
+        <!-- ========================================================= -->
+        <main class="main-content" id="dashboard">
+            <!-- 상단 인사말 및 실시간 검색바 -->
+            <header class="top-header">
+                <div class="greeting">
+                    <h2>안녕하세요, <span>Jake</span>님! 👋</h2>
+                    <p>오늘도 새로운 지식의 세계로 떠나볼까요?</p>
+                </div>
+
+                <!-- 도서 실시간 검색 입력창 -->
+                <div class="search-box">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="책 제목, 저자, 키워드 검색..." autocomplete="off">
+                    <button class="search-clear-btn" id="searchClearBtn" aria-label="검색어 지우기">&times;</button>
+                </div>
+            </header>
+
+            <!-- 1. 핵심 통계 카드 (모바일 3열 컴팩트 최적화) -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon books-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    </div>
+                    <div class="stat-info">
+                        <p class="stat-label">총 읽은 책</p>
+                        <h3 class="stat-value" id="totalBooks">0</h3>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon this-year-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    </div>
+                    <div class="stat-info">
+                        <p class="stat-label">올해 (<span id="currentYearLabel">2026</span>)</p>
+                        <h3 class="stat-value" id="booksThisYear">0</h3>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon this-month-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    </div>
+                    <div class="stat-info">
+                        <p class="stat-label">이번 달</p>
+                        <h3 class="stat-value" id="booksThisMonth">0</h3>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. 월별 통계 차트 & 최근 읽은 책 그리드 -->
+            <div class="content-grid" id="statsSection">
+                <!-- 월별 추이 차트 -->
+                <section class="chart-section panel">
+                    <div class="panel-header">
+                        <h3>월별 독서 추이</h3>
+                        <select id="yearSelector" class="custom-select">
+                            <option value="2026">2026년</option>
+                            <option value="2025">2025년</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </section>
+                
+                <!-- 최근 읽은 책 목록 -->
+                <section class="recent-books-section panel">
+                    <div class="panel-header">
+                        <h3>최근 읽은 책</h3>
+                        <span class="badge" id="recentBadge">최근 5권</span>
+                    </div>
+                    <div class="books-list" id="recentBooksList">
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <p>독서 기록을 불러오는 중입니다...</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- 3. 전체 도서 갤러리 섹션 -->
+            <section class="gallery-section panel mt-6" id="gallerySection">
+                <div class="panel-header gallery-header">
+                    <div class="gallery-title-wrap">
+                        <h3>독서 갤러리</h3>
+                        <span class="count-badge" id="galleryCount">0권</span>
+                    </div>
+                    <!-- 가로 스크롤 태그 필터 바 -->
+                    <div class="filter-pills" id="tagFilters">
+                        <!-- 자바스크립트로 동적 렌더링 -->
+                    </div>
+                </div>
+                <div class="book-gallery" id="bookGallery">
+                    <!-- 도서 카드들이 자바스크립트로 주입됩니다 -->
+                </div>
+            </section>
+        </main>
+
+        <!-- ========================================================= -->
+        <!-- [모바일 전용 하단 고정 탭바] -->
+        <!-- ========================================================= -->
+        <nav class="mobile-bottom-nav">
+            <button class="bottom-nav-item active" onclick="scrollToSection('dashboard')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>홈</span>
+            </button>
+            <button class="bottom-nav-item" onclick="scrollToSection('gallerySection')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                <span>갤러리</span>
+            </button>
+            <button class="bottom-nav-item" onclick="scrollToSection('statsSection')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span>통계</span>
+            </button>
+            <button class="bottom-nav-item" onclick="focusSearch()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <span>검색</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- [인앱 독서록 뷰어 모달] (모바일 및 웹에서 새 창 없이 바로 열람) -->
+    <!-- ========================================================= -->
+    <div id="bookViewerModal" class="book-modal" aria-hidden="true">
+        <div class="book-modal-backdrop" onclick="closeBookModal()"></div>
+        <div class="book-modal-container">
+            <header class="book-modal-header">
+                <div class="book-modal-title-wrap">
+                    <span class="modal-badge">독서 기록장</span>
+                    <h4 class="book-modal-title" id="bookModalTitle">도서 상세</h4>
+                </div>
+                <div class="book-modal-actions">
+                    <button class="modal-btn" id="openExternalBtn" title="새 창으로 보기" onclick="openCurrentBookInNewTab()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                        <span>새 창</span>
+                    </button>
+                    <button class="modal-btn close-btn" title="닫기" onclick="closeBookModal()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        <span>닫기</span>
+                    </button>
+                </div>
+            </header>
+            <div class="book-modal-body">
+                <iframe id="bookViewerFrame" src="about:blank" title="독서록 내용"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- 대시보드 인터랙션 스크립트 연결 -->
+    <script src="app.js?v=3"></script>
+</body>
+</html>

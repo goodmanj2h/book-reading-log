@@ -1,0 +1,18 @@
+{
+  "name": "독서 기록 대시보드 - Book Reading Log",
+  "short_name": "독서로그",
+  "description": "나만의 프리미엄 독서 기록 및 통계 대시보드",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F5F5F7",
+  "theme_color": "#0071E3",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+

@@ -1,6 +1,17 @@
+# Mac 시스템 파일
 .DS_Store
+
+# 파이썬 캐시 및 가상환경
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# 대용량 바이너리 실행 파일 (GitHub 업로드 제외)
+ngrok
+ngrok.zip
+
+# IDE 설정 파일
 .vscode/
 .idea/
-
